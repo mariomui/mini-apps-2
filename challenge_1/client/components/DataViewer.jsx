@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactPaginate from 'react-paginate';
 import LineItem from './LineItem.jsx';
 
 const Header = () => (
@@ -11,7 +10,7 @@ const Header = () => (
 );
 
 function DataViewer(props) {
-  const { page, datas } = props;
+  const { pageCount, datas } = props;
 
   // category1: "By place"
   // category2: "Egypt"

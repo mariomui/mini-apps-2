@@ -11,10 +11,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       searchTerm: '',
-      page: 0,
       datas: [],
       offset: 0,
-      test: 0
+      test: 0,
+      perPage: 10
     };
   }
 
@@ -29,31 +29,46 @@ class App extends React.Component {
   };
   //localhost:3000/events/?q=pilgrim&page=7&limit=14
 
-  handleCollectInfo() {
-    const { page } = this.props;
-    axios.get(url + `/?q=${this.state.searchTerm}&page=${page}&_limit=${10}`).
-      then((datas) => {
-        this.setState({
+  handleCollectInfo = () => {
+    // const { page } = this.props;
+    const { offset, perPage, pageCount } = this.state;
+    const query = url + `/?q=${this.state.searchTerm}&page=${offset}&_limit=${perPage}`;
+
+    const testquery = url + `/?q=${this.state.searchTerm}&_start=${offset}&_end=${offset + 10}`;
+
+    axios.get(testquery)
+      .then((datas) => {
+        var object = this.state;
+        var newObject = {
           datas: datas.data,
-          page: 1,
-          pageCount: Number(datas.headers['x-total-count']),
+          pageCount: +datas.headers['x-total-count'],
+        }
+        Object.assign(object, this.state, newObject);
+        this.setState(object, () => {
+          console.log(pageCount);
         });
+
       })
   }
 
   handlePageClick = data => {
-    let selected = data.selected;
+    const { perPage } = this.state;
+    let { selected } = data;
+
     console.log(selected, 'sel');
-    let offset = Math.ceil(selected * 10);
+
+    let offset = Math.ceil(selected * perPage);
 
     this.setState({
-      test: offset
+      offset: offset
+    }, () => {
+      this.handleCollectInfo();
     })
   }
 
   render() {
     console.log('we made a change')
-    const { pageCount, page, datas } = this.state;
+    const { pageCount, datas } = this.state;
     return (
       <div>
         <h1>{this.state.toby}</h1>
@@ -61,12 +76,12 @@ class App extends React.Component {
           <thead>
             <tr>
               <td>
-                <Search url={url} handleSubmit={this.handleSubmit} />
+                <Search handleSubmit={this.handleSubmit} />
               </td>
             </tr>
           </thead>
           <tbody>
-            <DataViewer page={page} datas={datas} />
+            <DataViewer pageCount={pageCount} datas={datas} />
 
             <tr>
               <td style={{ border: '1px solid black', color: 'blue', margin: '1px' }} id="react-paginate">
@@ -77,7 +92,7 @@ class App extends React.Component {
                   breakClassName={'break-me'}
                   pageCount={pageCount}
                   pageRangeDisplayed={1}
-                  marginPagesDisplayed={3}
+                  marginPagesDisplayed={1}
                   containerClassName={'pagination'}
                   subContainerClassName={'pages pagination'}
                   activeClassName={'active'}
