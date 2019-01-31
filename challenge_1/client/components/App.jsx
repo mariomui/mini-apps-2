@@ -31,7 +31,6 @@ class App extends React.Component {
 
   handleCollectInfo = (searchTerm) => {
     const { offset, perPage, pageCount } = this.state;
-    debugger;
     const query = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
 
     axios.get(query)

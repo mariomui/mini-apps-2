@@ -1,30 +1,20 @@
 import React from 'react';
+const { objectFilter } = require('../../data/helpers/index.js');
 
 function LineItem(props) {
-  const { category1, category2, date, description, granularity, lang } = props.data;
-
+  const { data } = props;
+  const blacklist = ['category1', 'category2'];
+  const util = Object.values(objectFilter(blacklist, data)).map((item) => {
+    return (
+      <td>
+        {item}
+      </td>
+    );
+  });
   return (
     <tr>
-      <td>
-        {category1}
-      </td>
-      <td>
-        {category2}
-      </td>
-      <td>
-        {date}
-      </td>
-      <td>
-        {description}
-      </td>
-      <td>
-        {granularity}
-      </td>
-      <td>
-        {lang}
-      </td>
+      {util}
     </tr>
-
   );
 }
 

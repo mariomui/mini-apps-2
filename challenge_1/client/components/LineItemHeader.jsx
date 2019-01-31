@@ -8,11 +8,13 @@ function Header(props) {
   return (
     <tr>
       {
-        listOfHeaders.length ? listOfHeaders.map(fp => (
-          <th>
-            {fp}
-          </th>
-        )) : null
+        listOfHeaders.length ? listOfHeaders
+          .filter(header => header.indexOf('category') === -1)
+          .map(fp => (
+            <th>
+              {fp}
+            </th>
+          )) : null
       }
     </tr>
   );
