@@ -14,7 +14,8 @@ class App extends React.Component {
       datas: [],
       offset: 0,
       test: 0,
-      perPage: 10
+      perPage: 10,
+      pageCount: 0
     };
   }
 
@@ -25,34 +26,37 @@ class App extends React.Component {
     console.log('hi');
     this.setState({
       searchTerm,
-    }, this.handleCollectInfo());
+    }, this.handleCollectInfo(searchTerm));
   };
   //localhost:3000/events/?q=pilgrim&page=7&limit=14
 
-  handleCollectInfo = () => {
+  handleCollectInfo = (searchTerm) => {
     // const { page } = this.props;
     const { offset, perPage, pageCount } = this.state;
-    const query = url + `/?q=${this.state.searchTerm}&page=${offset}&_limit=${perPage}`;
 
-    const testquery = url + `/?q=${this.state.searchTerm}&_start=${offset}&_end=${offset + 10}`;
+    const query = url + `/?q=${searchTerm}&page=${offset}&_limit=${perPage}`;
+
+    const testquery = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
 
     axios.get(testquery)
       .then((datas) => {
         var object = this.state;
         var newObject = {
           datas: datas.data,
-          pageCount: +datas.headers['x-total-count'],
+          pageCount: Math.ceil(+datas.headers['x-total-count'] / perPage),
         }
+
         Object.assign(object, this.state, newObject);
+
         this.setState(object, () => {
           console.log(pageCount);
-        });
 
+        });
       })
   }
 
   handlePageClick = data => {
-    const { perPage } = this.state;
+    const { perPage, searchTerm } = this.state;
     let { selected } = data;
 
     console.log(selected, 'sel');
@@ -62,7 +66,7 @@ class App extends React.Component {
     this.setState({
       offset: offset
     }, () => {
-      this.handleCollectInfo();
+      this.handleCollectInfo(searchTerm);
     })
   }
 
