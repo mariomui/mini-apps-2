@@ -1,30 +1,6 @@
 import React, { Component } from 'react';
 import LineItem from './LineItem.jsx';
-
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      headers: []
-    };
-  }
-
-  render() {
-    var firstpass = Object.keys(this.props.datas[0]);
-
-    return (
-      <tr>
-        {
-          firstpass.length ? firstpass.map(fp => (
-            <th>
-              {fp}
-            </th>
-          )) : null
-        }
-      </tr>
-    );
-  }
-}
+import Header from './LineItemHeader.jsx';
 
 class DataViewer extends Component {
   constructor(props) {
@@ -33,15 +9,6 @@ class DataViewer extends Component {
 
     };
   }
-
-
-  // category1: "By place"
-  // category2: "Egypt"
-  // date: "-300"
-  // description: "Pyrrhus, the King of Epirus, is
-  // taken as a hostage to Egypt after the Battle of Ipsus and
-  // granularity: "year"
-  // lang: "en"
 
   render() {
     const { datas } = this.props;
