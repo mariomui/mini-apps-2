@@ -13,7 +13,6 @@ class App extends React.Component {
       searchTerm: '',
       datas: [],
       offset: 0,
-      test: 0,
       perPage: 10,
       pageCount: 0
     };
@@ -34,11 +33,9 @@ class App extends React.Component {
     // const { page } = this.props;
     const { offset, perPage, pageCount } = this.state;
 
-    const query = url + `/?q=${searchTerm}&page=${offset}&_limit=${perPage}`;
+    const query = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
 
-    const testquery = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
-
-    axios.get(testquery)
+    axios.get(query)
       .then((datas) => {
         var object = this.state;
         var newObject = {
@@ -49,8 +46,7 @@ class App extends React.Component {
         Object.assign(object, this.state, newObject);
 
         this.setState(object, () => {
-          console.log(pageCount);
-
+          console.log(pageCount, 'pageCount');
         });
       })
   }
