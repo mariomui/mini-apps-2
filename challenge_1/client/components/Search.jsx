@@ -40,18 +40,18 @@ class Search extends Component {
     const { searchTerm } = this.state;
 
     return (
-      <thead>
-        <tr>
-          <td>
-            <form onSubmit={this.triggerSubmit}>
-              <label> Search
+      // <thead>
+      <tr>
+        <td>
+          <form onSubmit={this.triggerSubmit}>
+            <label> Search
                 <input required name="q" value={searchTerm} onChange={this.handleChange} type="text" />
-              </label>
-              <input type="submit" value="Submit" />
-            </form >
-          </td>
-        </tr>
-      </thead>
+            </label>
+            <input type="submit" value="Submit" />
+          </form >
+        </td>
+      </tr>
+      // </thead>
     );
   }
 }

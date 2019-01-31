@@ -6,13 +6,13 @@ function Header(props) {
   const listOfHeaders = Object.keys(datas[0]);
 
   return (
-    <tr>
+    <tr className="headers">
       {
         listOfHeaders.length ? listOfHeaders
           .filter(header => header.indexOf('category') === -1)
           .map(fp => (
             <th>
-              {fp}
+              {fp.toUpperCase()}
             </th>
           )) : null
       }

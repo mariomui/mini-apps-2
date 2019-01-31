@@ -71,10 +71,12 @@ class App extends React.Component {
     return (
       <div>
         <table className="data-table">
-          <Search
-            clearSearch={''}
-            handleSubmit={this.handleSubmit}
-          />
+          <thead>
+            <Search
+              clearSearch={''}
+              handleSubmit={this.handleSubmit}
+            />
+          </thead>
           <tbody>
             <DataViewer
               pageCount={pageCount}
