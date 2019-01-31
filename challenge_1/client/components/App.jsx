@@ -30,22 +30,24 @@ class App extends React.Component {
   //localhost:3000/events/?q=pilgrim&page=7&limit=14
 
   handleCollectInfo = (searchTerm) => {
-    // const { page } = this.props;
     const { offset, perPage, pageCount } = this.state;
-
+    debugger;
     const query = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
 
     axios.get(query)
       .then((datas) => {
-        var object = this.state;
-        var newObject = {
+        var stateCollector = {};
+
+        var oldState = this.state;
+
+        var newState = {
           datas: datas.data,
           pageCount: Math.ceil(+datas.headers['x-total-count'] / perPage),
         }
 
-        Object.assign(object, this.state, newObject);
+        Object.assign(stateCollector, oldState, newState);
 
-        this.setState(object, () => {
+        this.setState(stateCollector, () => {
           console.log(pageCount, 'pageCount');
         });
       })
@@ -53,9 +55,7 @@ class App extends React.Component {
 
   handlePageClick = data => {
     const { perPage, searchTerm } = this.state;
-    let { selected } = data;
-
-    console.log(selected, 'sel');
+    const { selected } = data;
 
     let offset = Math.ceil(selected * perPage);
 
@@ -67,24 +67,24 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('we made a change')
     const { pageCount, datas } = this.state;
+    const tableCss = {
+      border: '1px solid black',
+      color: 'blue',
+      margin: '1px'
+    }
+
     return (
       <div>
-        <h1>{this.state.toby}</h1>
         <table className="data-table">
-          <thead>
-            <tr>
-              <td>
-                <Search handleSubmit={this.handleSubmit} />
-              </td>
-            </tr>
-          </thead>
+
+          <Search clearSearch={''} handleSubmit={this.handleSubmit} />
+
           <tbody>
             <DataViewer pageCount={pageCount} datas={datas} />
 
             <tr>
-              <td style={{ border: '1px solid black', color: 'blue', margin: '1px' }} id="react-paginate">
+              <td style={tableCss} id="react-paginate">
                 <ReactPaginate
                   previousLabel={'previous'}
                   nextLabel={'next'}
@@ -97,15 +97,11 @@ class App extends React.Component {
                   subContainerClassName={'pages pagination'}
                   activeClassName={'active'}
                   onPageChange={this.handlePageClick}
-                  on
                 />
-
               </td>
             </tr>
           </tbody>
         </table>
-
-
       </div >
     );
   }

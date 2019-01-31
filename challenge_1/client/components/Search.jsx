@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
-import axios from 'axios';
+
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -9,37 +8,50 @@ class Search extends Component {
     }
   }
 
-  // loadCommentsFromServer = () => {
-
-  // }
-
-
   handleChange = (e) => {
     e.preventDefault();
     this.setState({
       searchTerm: e.target.value
     })
   }
-  clear = (e) => {
+
+  clear = () => {
     this.setState({
       searchTerm: ''
     })
   }
 
-  render() {
-    const { handleSubmit } = this.props;
-    return (
+  componentDidMount() {
+    this.setState({
+      searchTerm: ''
+    })
+  }
 
-      <form onSubmit={
-        (e) => {
-          handleSubmit(e, this.state.searchTerm);
-          this.clear(e);
-        }}>
-        <label> Search
-        <input required name="q" value={this.state.searchTerm} onChange={this.handleChange} type="text" />
-        </label>
-        <input type="submit" value="Submit" />
-      </form >
+  triggerSubmit = (e) => {
+    const { handleSubmit } = this.props;
+    const { searchTerm } = this.state;
+
+    handleSubmit(e, searchTerm);
+    this.clear();
+  }
+
+  render() {
+    // const { handleSubmit } = this.props;
+    const { searchTerm } = this.state;
+
+    return (
+      <thead>
+        <tr>
+          <td>
+            <form onSubmit={this.triggerSubmit}>
+              <label> Search
+                <input required name="q" value={searchTerm} onChange={this.handleChange} type="text" />
+              </label>
+              <input type="submit" value="Submit" />
+            </form >
+          </td>
+        </tr>
+      </thead>
     );
   }
 }

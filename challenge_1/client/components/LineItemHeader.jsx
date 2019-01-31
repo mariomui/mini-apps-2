@@ -1,28 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      headers: []
-    };
-  }
+function Header(props) {
+  const { datas } = props;
+  const listOfHeaders = Object.keys(datas[0]);
 
-  render() {
-    var firstpass = Object.keys(this.props.datas[0]);
-
-    return (
-      <tr>
-        {
-          firstpass.length ? firstpass.map(fp => (
-            <th>
-              {fp}
-            </th>
-          )) : null
-        }
-      </tr>
-    );
-  }
+  return (
+    <tr>
+      {
+        listOfHeaders.length ? listOfHeaders.map(fp => (
+          <th>
+            {fp}
+          </th>
+        )) : null
+      }
+    </tr>
+  );
 }
+
+Header.propTypes = {
+  datas: PropTypes.array.isRequired,
+};
 
 export default Header;
