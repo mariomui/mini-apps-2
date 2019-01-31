@@ -1,9 +1,9 @@
 import React from 'react';
 import Search from './Search.jsx';
+import Paginator from './Paginator';
 import DataViewer from './DataViewer.jsx';
 const axios = require('axios');
 import '../../dist/main.css';
-import ReactPaginate from 'react-paginate';
 const url = '/events';
 
 class App extends React.Component {
@@ -67,38 +67,23 @@ class App extends React.Component {
 
   render() {
     const { pageCount, datas } = this.state;
-    const tableCss = {
-      border: '1px solid black',
-      color: 'blue',
-      margin: '1px'
-    }
 
     return (
       <div>
         <table className="data-table">
-
-          <Search clearSearch={''} handleSubmit={this.handleSubmit} />
-
+          <Search
+            clearSearch={''}
+            handleSubmit={this.handleSubmit}
+          />
           <tbody>
-            <DataViewer pageCount={pageCount} datas={datas} />
-
-            <tr>
-              <td style={tableCss} id="react-paginate">
-                <ReactPaginate
-                  previousLabel={'previous'}
-                  nextLabel={'next'}
-                  breakLabel={'...'}
-                  breakClassName={'break-me'}
-                  pageCount={pageCount}
-                  pageRangeDisplayed={1}
-                  marginPagesDisplayed={1}
-                  containerClassName={'pagination'}
-                  subContainerClassName={'pages pagination'}
-                  activeClassName={'active'}
-                  onPageChange={this.handlePageClick}
-                />
-              </td>
-            </tr>
+            <DataViewer
+              pageCount={pageCount}
+              datas={datas}
+            />
+            <Paginator pageCount={pageCount}
+              handlePageClick={this.handlePageClick}
+              minShownPagers={10}
+            />
           </tbody>
         </table>
       </div >
