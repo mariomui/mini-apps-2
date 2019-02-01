@@ -21,18 +21,18 @@ module.exports = {
           options: {
             presets: [
               '@babel/preset-env',
-            ]
-          }
-        }
+            ],
+          },
+        },
       },
       {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
-        ]
+          'css-loader',
+        ],
       },
 
-    ]
-  }
+    ],
+  },
 };

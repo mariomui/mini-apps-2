@@ -30,10 +30,12 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "chart.js": "^2.7.3",
     "express": "^4.16.4",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "path": "^0.12.7",
     "react": "^16.7.0",
