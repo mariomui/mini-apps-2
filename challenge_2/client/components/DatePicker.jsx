@@ -7,29 +7,16 @@ class DatePicker extends Component {
     this.state = {
       from: '',
       to: '',
-      allowSubmit: false,
     };
   }
 
   handleDateChange = (e) => {
-    console.log('hey', e.target.value)
     const { name } = e.target;
-    const isAllowed = this.allowSubmit();
     this.setState({
       [name]: e.target.value,
-      allowSubmit: isAllowed
     });
   }
 
-  allowSubmit = () => {
-    const { from, to } = this.state;
-    // let fromNum = Date.parse(this.state.from);
-    // let toNum = Date.parse(this.state.to);
-    if (from > to) {
-      return true;
-    }
-    return false;
-  }
 
   triggerSubmit = (e) => {
     const { from, to } = this.state;
@@ -39,22 +26,22 @@ class DatePicker extends Component {
 
   render() {
     const { from, to } = this.state;
+    let util = Date.parse(from) < Date.parse(to);
     return (
-      <div>
-
+      <div className="form-group">
         <form onSubmit={this.triggerSubmit}>
-          <label>
+          <label className="control-label">
             From:
-          <input type="date" name="from" value={from} onChange={this.handleDateChange} />
+          <input className="form-control" type="date" name="from" value={from} onChange={this.handleDateChange} />
           </label>
 
-          <label>
+          <label className="control-label">
             To:
-          <input type="date" name="to" value={to} onChange={this.handleDateChange} />
+          <input className="form-control" type="date" name="to" value={to} onChange={this.handleDateChange} />
           </label>
-          {this.state.allowSubmit ? <input type="submit" value="Submit"></input> : <input type="submit" value="Submit"></input>}
+          {util ? <input className="btn btn-primary" type="submit" value="Submit"></input> : <input className="btn btn-primary" disabled type="submit" value="Submit"></input>}
         </form>
-      </div>
+      </div >
     );
   }
 }

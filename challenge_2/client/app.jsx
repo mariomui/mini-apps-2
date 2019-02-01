@@ -35,14 +35,25 @@ class App extends React.Component {
         end,
       },
     };
-    axios.get(url, options)
-      .then((datas) => {
-        console.log(datas.data, 'hi');
-        this.setState({
-          xDatas: datas.data.bpi,
-          yDatas: datas.data.bpi,
+    var storage = window.sessionStorage;
+    var cacheKey = `${start}${end}`;
+    if (storage.getItem(cacheKey)) {
+      var cacheResult = storage.getItem(cacheKey);
+      this.setState({
+        xDatas: cacheResult,
+        yDatas: cacheResult
+      })
+    } else {
+      axios.get(url, options)
+        .then((datas) => {
+          console.log(datas.data, 'hi');
+          storage.setItem(cacheKey, datas.data.bpi);
+          this.setState({
+            xDatas: datas.data.bpi,
+            yDatas: datas.data.bpi,
+          });
         });
-      });
+    }
   }
 
   handleSubmit = (e, from, to) => {
