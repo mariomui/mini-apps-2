@@ -6,12 +6,12 @@ function changeText(e) {
   // debugger;
 }
 
-class Pin extends Component {
+class Pin extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
-    const { key, pin } = props;
+    const { key, pin } = this.props;
     return (
       <input type='button' name={key} value={pin} onClick={changeText} className='pin'>
       </input>
