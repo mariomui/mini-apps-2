@@ -1,9 +1,9 @@
 import React from 'react';
 import Search from './Search.jsx';
+import Paginator from './Paginator';
 import DataViewer from './DataViewer.jsx';
 const axios = require('axios');
 import '../../dist/main.css';
-import ReactPaginate from 'react-paginate';
 const url = '/events';
 
 class App extends React.Component {
@@ -13,8 +13,8 @@ class App extends React.Component {
       searchTerm: '',
       datas: [],
       offset: 0,
-      test: 0,
-      perPage: 10
+      perPage: 10,
+      pageCount: 0
     };
   }
 
@@ -25,87 +25,69 @@ class App extends React.Component {
     console.log('hi');
     this.setState({
       searchTerm,
-    }, this.handleCollectInfo());
+    }, this.handleCollectInfo(searchTerm));
   };
   //localhost:3000/events/?q=pilgrim&page=7&limit=14
 
-  handleCollectInfo = () => {
-    // const { page } = this.props;
+  handleCollectInfo = (searchTerm) => {
     const { offset, perPage, pageCount } = this.state;
-    const query = url + `/?q=${this.state.searchTerm}&page=${offset}&_limit=${perPage}`;
+    const query = url + `/?q=${searchTerm}&_start=${offset}&_end=${offset + 10}`;
 
-    const testquery = url + `/?q=${this.state.searchTerm}&_start=${offset}&_end=${offset + 10}`;
-
-    axios.get(testquery)
+    axios.get(query)
       .then((datas) => {
-        var object = this.state;
-        var newObject = {
-          datas: datas.data,
-          pageCount: +datas.headers['x-total-count'],
-        }
-        Object.assign(object, this.state, newObject);
-        this.setState(object, () => {
-          console.log(pageCount);
-        });
+        var stateCollector = {};
 
+        var oldState = this.state;
+
+        var newState = {
+          datas: datas.data,
+          pageCount: Math.ceil(+datas.headers['x-total-count'] / perPage),
+        }
+
+        Object.assign(stateCollector, oldState, newState);
+
+        this.setState(stateCollector, () => {
+          console.log(pageCount, 'pageCount');
+        });
       })
   }
 
   handlePageClick = data => {
-    const { perPage } = this.state;
-    let { selected } = data;
-
-    console.log(selected, 'sel');
+    const { perPage, searchTerm } = this.state;
+    const { selected } = data;
 
     let offset = Math.ceil(selected * perPage);
 
     this.setState({
       offset: offset
     }, () => {
-      this.handleCollectInfo();
+      this.handleCollectInfo(searchTerm);
     })
   }
 
   render() {
-    console.log('we made a change')
     const { pageCount, datas } = this.state;
+
     return (
       <div>
-        <h1>{this.state.toby}</h1>
         <table className="data-table">
           <thead>
-            <tr>
-              <td>
-                <Search handleSubmit={this.handleSubmit} />
-              </td>
-            </tr>
+            <Search
+              clearSearch={''}
+              handleSubmit={this.handleSubmit}
+            />
           </thead>
           <tbody>
-            <DataViewer pageCount={pageCount} datas={datas} />
-
-            <tr>
-              <td style={{ border: '1px solid black', color: 'blue', margin: '1px' }} id="react-paginate">
-                <ReactPaginate
-                  previousLabel={'previous'}
-                  nextLabel={'next'}
-                  breakLabel={'...'}
-                  breakClassName={'break-me'}
-                  pageCount={pageCount}
-                  pageRangeDisplayed={1}
-                  marginPagesDisplayed={1}
-                  containerClassName={'pagination'}
-                  subContainerClassName={'pages pagination'}
-                  activeClassName={'active'}
-                  onPageChange={this.handlePageClick}
-                  on
-                />
-
-              </td>
-            </tr>
+            <DataViewer
+              pageCount={pageCount}
+              datas={datas}
+            />
+            <Paginator pageCount={pageCount}
+              handlePageClick={this.handlePageClick}
+              minShownPagers={10}
+            />
           </tbody>
         </table>
-
-
       </div >
     );
   }

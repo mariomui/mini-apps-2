@@ -1,25 +1,21 @@
 import React from 'react';
+const { objectFilter } = require('../../data/helpers/index.js');
 
 function LineItem(props) {
-  const { category1, category2, date, description, granularity, lang } = props.data;
+  const { data } = props;
+  const blacklist = ['category1', 'category2'];
+  const util = Object.values(objectFilter(blacklist, data)).map((item) => {
+    return (
+      <td>
+        {item}
+      </td>
+    );
+  });
   return (
     <tr>
-      <td>
-
-        {date}
-      </td>
-      <td>
-
-        {description}
-      </td>
+      {util}
     </tr>
-
   );
 }
-// category1: "By place"
-// category2: "Egypt"
-// date: "-300"
-// description: "Pyrrhus, the King of Epirus, is taken as a hostage to Egypt after the Battle of Ipsus and makes a diplomatic marriage with the princess Antigone, daughter of Ptolemy and Berenice."
-// granularity: "year"
-// lang: "en"
+
 export default LineItem;
