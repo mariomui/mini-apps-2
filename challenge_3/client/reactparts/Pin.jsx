@@ -2,16 +2,21 @@ import React from 'react';
 
 function changeText(e) {
   console.log('hello');
-  e.target.childNodes[0].textContent = "0"
+  e.target.value = "0";
+  // debugger;
 }
 
-function Pin(props) {
-  const { pin } = props;
-  return (
-    <div onClick={changeText} className='pin'>
-      {pin}
-    </div>
-  )
+class Pin extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { key, pin } = props;
+    return (
+      <input type='button' name={key} value={pin} onClick={changeText} className='pin'>
+      </input>
+    )
+  }
 }
 
 export default Pin;

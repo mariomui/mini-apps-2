@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Pin from './Pin';
+import { timingSafeEqual } from 'crypto';
 
 class Grid extends Component {
   constructor(props) {
@@ -7,7 +8,6 @@ class Grid extends Component {
     this.state = {
       pinsToHit: {},
       board: [],
-      initialized: false
     };
   }
   // setPin(rowIdx, columnIdx)
@@ -25,25 +25,24 @@ class Grid extends Component {
     }
     board.push([0, 10, 0]);
     this.setState({
-      board: board
-    },
-      () => { console.log('notify') })
+      board,
+    }
+      ,
+      () => {
+        this.setState({
+          state: this.state
+        })
+        console.log('notify');
+      })
   }
 
   componentDidMount() {
     this.resetPins();
-    if (this.state.initialized === false) {
-      this.resetPins();
-    }
-    if (this.state.initialized === false) {
-      this.setState({
-        initialized: true
-      })
-    }
   }
 
   render() {
     const { board } = this.state;
+    // this.resetPins();
 
     return (
       <div>
@@ -53,7 +52,7 @@ class Grid extends Component {
               {
                 row.map((pin, colIdx) => {
                   return (
-                    <Pin pin={pin} rowIdx={rowIdx} colIdx={colIdx} />
+                    <Pin key={`${rowIdx}+${colIdx}`} pin={pin} rowIdx={rowIdx} colIdx={colIdx} />
                   );
                 })
               }
