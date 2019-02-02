@@ -1,0 +1,5 @@
+To satisfy the minimum requirements of this challenge, start with a user interface that allows for pin quantity selection only; i.e. the UI allows the player to select the number of pins hit on each bowl, not which pins were hit. Suggestion: create a telephone keypad-style UI that includes '10'. No CSS styling is necessary. Use the browser's default styling for all elements on your page.
+
+Additionally, simplify gameplay by initially making this a one-person game. This allows you to focus on building and modeling the scorecard UI and scoring algorithm for a single player. As bowls happen, keep track of the score for each bowl, frame and the total score. Use React components to display the game progression and total score in the UI.
+
+Write tests to ensure all the nuances of the scoring rules are correctly implemented.
