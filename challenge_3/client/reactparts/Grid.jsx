@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Pin from './Pin';
-import { timingSafeEqual } from 'crypto';
 
+let globalScore = 0;
 class Grid extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pinsToHit: {},
       board: [],
+      score: 0
     };
   }
   // setPin(rowIdx, columnIdx)
@@ -40,9 +41,17 @@ class Grid extends Component {
     this.resetPins();
   }
 
+  addToScore = (value) => {
+    globalScore = this.state.score += Number(value);
+    console.log(globalScore);
+  }
+  triggerSubmit = () => {
+    this.props.submitFrame(globalScore);
+
+  }
+
   render() {
     const { board } = this.state;
-    // this.resetPins();
 
     return (
       <div>
@@ -52,7 +61,7 @@ class Grid extends Component {
               {
                 row.map((pin, colIdx) => {
                   return (
-                    <Pin key={`${rowIdx}+${colIdx}`} pin={pin} rowIdx={rowIdx} colIdx={colIdx} />
+                    <Pin addToScore={this.addToScore} key={`${rowIdx}+${colIdx}`} pin={pin} rowIdx={rowIdx} colIdx={colIdx} />
                   );
                 })
               }
@@ -60,6 +69,9 @@ class Grid extends Component {
           );
         })}
         <button onClick={this.resetPins}>Reset</button>
+        <button onClick={this.triggerSubmit}>
+          Submit Frame
+        </button>
       </div>
     );
   }
